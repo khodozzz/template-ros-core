@@ -1,0 +1,6 @@
+<launch>
+	<arg name="veh" default="$(env VEHICLE_NAME)"/>
+	<group ns="$(arg veh)">
+		<node name="navigation_node" pkg="graph_movement" type="navigation_node.py" output="screen" required="true"/>
+	</group>
+</launch>
