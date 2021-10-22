@@ -9,5 +9,7 @@ class NavigationController:
         path, turns, dist = self.graph.shortest_path(self.current_pos, target)
         self._turns_it = iter(turns)
 
+        self.path = path
+
     def next_turn(self):
         return next(self._turns_it)

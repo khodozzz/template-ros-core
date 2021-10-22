@@ -18,6 +18,7 @@ class NavigationNode(DTROS):
     def run(self):
         rospy.loginfo('Building path...')
         self.controller.plan_path(dt_etu.target_pos())
+        rospy.loginfo(f'Path is {self.controller.path}')
 
         rate = rospy.Rate(1)  # 1Hz
         while not rospy.is_shutdown():
