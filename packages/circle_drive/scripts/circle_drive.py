@@ -19,22 +19,12 @@ class NavigationNode(DTROS):
         rospy.loginfo('Building path...')
         self.controller.plan_path(dt_etu.target_pos())
 
+        rate = rospy.Rate(1)  # 1Hz
         while not rospy.is_shutdown():
-            if self.red_line_sub:  # TODO: if on red line
-                # msg = Int32()
-                # msg.data = 0  # turn
-                # self.state_pub.publish(msg)
+            turn = self.controller.next_turn()
+            rospy.loginfo(f'Next turn is {turn}')
+            rate.sleep()
 
-                turn = self.controller.next_turn()
-                rospy.loginfo(f'Next turn is {turn}')
-                # msg = Int32()
-                # msg.data = turn
-                # self.turn_pub.publish(msg)
-            else:
-                pass
-                # msg = Int32()
-                # msg.data = 1  # lane following
-                # self.state_pub.publish(msg)
 
 
 if __name__ == '__main__':
