@@ -6,4 +6,4 @@ set -e
 # ----------------------------------------------------------------------------
 echo "This is an empty launch script. Update it to launch your application."
 
-roslaunch graph_movement launch.launch
+roslaunch circle_drive circle_drive.launch
