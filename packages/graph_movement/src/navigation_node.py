@@ -11,9 +11,9 @@ class NavigationNode(DTROS):
 
         self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
 
-        self.red_line_sub = rospy.Subcriber("~red_line", Bool, queue_size=1)
-        self.turn_pub = rospy.Publisher("~turn", Int32, queue_size=1)
-        self.state_pub = rospy.Publisher("~state", Int32, queue_size=1)
+        # self.red_line_sub = rospy.Subcriber("~red_line", Bool, queue_size=1)
+        # self.turn_pub = rospy.Publisher("~turn", Int32, queue_size=1)
+        # self.state_pub = rospy.Publisher("~state", Int32, queue_size=1)
 
     def run(self):
         rospy.loginfo('Building path...')
@@ -21,19 +21,20 @@ class NavigationNode(DTROS):
 
         while not rospy.is_shutdown():
             if self.red_line_sub:  # TODO: if on red line
-                msg = Int32()
-                msg.data = 0  # turn
-                self.state_pub.publish(msg)
+                # msg = Int32()
+                # msg.data = 0  # turn
+                # self.state_pub.publish(msg)
 
                 turn = self.controller.next_turn()
                 rospy.loginfo(f'Next turn is {turn}')
-                msg = Int32()
-                msg.data = turn
-                self.turn_pub.publish(msg)
+                # msg = Int32()
+                # msg.data = turn
+                # self.turn_pub.publish(msg)
             else:
-                msg = Int32()
-                msg.data = 1  # lane following
-                self.state_pub.publish(msg)
+                pass
+                # msg = Int32()
+                # msg.data = 1  # lane following
+                # self.state_pub.publish(msg)
 
 
 if __name__ == '__main__':
