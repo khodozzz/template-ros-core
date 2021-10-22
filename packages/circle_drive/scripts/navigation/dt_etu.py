@@ -1,4 +1,4 @@
-from navigation.graph import Graph
+from packages.circle_drive.scripts.navigation.graph import Graph
 
 
 def build_graph():
