@@ -3,13 +3,15 @@ class NavigationController:
         self.graph = graph
         self.current_pos = start_pos
 
-        self._turns_it = None
+        self._dist = self._path = self._edges = self._turns = self._turns_it = self._edges_it = None
 
     def plan_path(self, target):
-        path, turns, dist = self.graph.shortest_path(self.current_pos, target)
-        self._turns_it = iter(turns)
-
-        self.path = path
+        self._dist, self._path, self._edges, self._turns = self.graph.shortest_path(self.current_pos, target)
+        self._turns_it = iter(self._turns)
+        self._edges_it = iter(self._edges)
 
     def next_turn(self):
         return next(self._turns_it)
+
+    def next_road(self):
+        return next(self._edges_it)

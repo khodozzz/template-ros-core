@@ -46,7 +46,7 @@ class Graph:
             node = path[-1]
 
             if node == goal:
-                return path, edges, turns
+                return dist, path, edges, turns
 
             if node not in visited:
                 for edge in self._edges[node]:

@@ -16,14 +16,16 @@ class NavigationNode(DTROS):
         # self.state_pub = rospy.Publisher("~state", Int32, queue_size=1)
 
     def run(self):
-        rospy.loginfo('Building path...')
         self.controller.plan_path(dt_etu.target_pos())
-        rospy.loginfo(f'Path is {self.controller.path}')
+        rospy.loginfo(f'Builded path {self.controller._path}')
+        rospy.loginfo(f'Distance {self.controller._dist}')
 
         rate = rospy.Rate(1)  # 1Hz
         while not rospy.is_shutdown():
             turn = self.controller.next_turn()
+            road = self.controller.next_road()
             rospy.loginfo(f'Next turn is {turn}')
+            rospy.loginfo(f'Next road is {road}')
             rate.sleep()
 
 
