@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import rospy
 from duckietown.dtros import DTROS, NodeType
-from navigation.controller import NavigationController
-from navigation import dt_etu
+from navig.controller import NavigationController
+from navig import dt_etu
 
 
 class NavigationNode(DTROS):

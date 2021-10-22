@@ -1,4 +1,4 @@
-from navigation.graph import Graph
+from navig.graph import Graph
 
 
 def build_graph():
