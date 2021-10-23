@@ -8,10 +8,15 @@ import numpy
 import rospy
 from duckietown_msgs.msg import AprilTagsWithInfos, FSMState, TurnIDandType
 from std_msgs.msg import Int16  # Imports msg
+from controller import NavigationController
+import dt_etu
 
 
 class RandomAprilTagTurnsNode:
     def __init__(self):
+        # my code
+        self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
+
         # Save the name of the node
         self.node_name = rospy.get_name()
         self.turn_type = -1
@@ -49,9 +54,9 @@ class RandomAprilTagTurnsNode:
 
     def cbTag(self, tag_msgs):
         if (
-            self.fsm_mode == "INTERSECTION_CONTROL"
-            or self.fsm_mode == "INTERSECTION_COORDINATION"
-            or self.fsm_mode == "INTERSECTION_PLANNING"
+                self.fsm_mode == "INTERSECTION_CONTROL"
+                or self.fsm_mode == "INTERSECTION_COORDINATION"
+                or self.fsm_mode == "INTERSECTION_PLANNING"
         ):
             # loop through list of april tags
 
@@ -68,46 +73,8 @@ class RandomAprilTagTurnsNode:
                         idx_min = idx
 
             if idx_min != -1:
-                taginfo = (tag_msgs.infos)[idx_min]
-
-                availableTurns = []
-                # go through possible intersection types
-                signType = taginfo.traffic_sign_type
-                if signType == taginfo.NO_RIGHT_TURN or signType == taginfo.LEFT_T_INTERSECT:
-                    availableTurns = [
-                        0,
-                        1,
-                    ]  # these mystical numbers correspond to the array ordering in open_loop_intersection_control_node (very bad)
-                elif signType == taginfo.NO_LEFT_TURN or signType == taginfo.RIGHT_T_INTERSECT:
-                    availableTurns = [1, 2]
-                elif signType == taginfo.FOUR_WAY:
-                    availableTurns = [0, 1, 2]
-                elif signType == taginfo.T_INTERSECTION:
-                    availableTurns = [0, 2]
-                rospy.loginfo(f"[{self.node_name}] reports Available turns are: [{availableTurns}]")
-                # now randomly choose a possible direction
-                if len(availableTurns) > 0:
-                    # 3501: turn off right turns
-                    # randomIndex = numpy.random.randint(len(availableTurns))
-                    # chosenTurn = availableTurns[randomIndex]
-                    while True:
-                        randomIndex = numpy.random.randint(len(availableTurns))
-                        chosenTurn = availableTurns[randomIndex]
-                        rospy.loginfo("Turn type now: %i" %(chosenTurn))
-                        if chosenTurn != 2:
-                            break
-                    # end of fix
-
-                    self.turn_type = chosenTurn
-                    self.pub_turn_type.publish(self.turn_type)
-
-                    id_and_type_msg = TurnIDandType()
-                    id_and_type_msg.tag_id = taginfo.id
-                    id_and_type_msg.turn_type = self.turn_type
-                    self.pub_id_and_type.publish(id_and_type_msg)
-
-                    # rospy.loginfo("possible turns %s." %(availableTurns))
-                    # rospy.loginfo("Turn type now: %i" %(self.turn_type))
+                # my code
+                rospy.loginfo('i\'m here')
 
     def setupParameter(self, param_name, default_value):
         value = rospy.get_param(param_name, default_value)
@@ -130,4 +97,3 @@ if __name__ == "__main__":
     rospy.on_shutdown(node.on_shutdown)
     # Keep it spinning to keep the node alive
     rospy.spin()
-

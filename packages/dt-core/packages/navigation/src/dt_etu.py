@@ -1,4 +1,4 @@
-from navig.graph import Graph
+from graph import Graph
 
 
 def build_graph():
@@ -8,7 +8,6 @@ def build_graph():
     g.add_edge(1, 4, 8, 270, 0)
     g.add_edge(2, 4, 10, 270, 270)
     g.add_edge(3, 4, 15, 270, 180, bidirectional=True)
-
     return g
 
 
