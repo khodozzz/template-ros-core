@@ -69,8 +69,8 @@ class RandomAprilTagTurnsNode:
                         idx_min = idx
 
             if idx_min != -1:
-                rospy.loginfo('im here')
-                sys.stdout.flush()
+                # rospy.loginfo('im here')
+                # sys.stdout.flush()
 
                 taginfo = (tag_msgs.infos)[idx_min]
 
@@ -97,7 +97,7 @@ class RandomAprilTagTurnsNode:
                     while True:
                         randomIndex = numpy.random.randint(len(availableTurns))
                         chosenTurn = availableTurns[randomIndex]
-                        rospy.loginfo("Turn type now: %i" %(chosenTurn))
+                        rospy.loginfo("Turn type now: %i" % (chosenTurn))
                         if chosenTurn != 2:
                             break
                     # end of fix
@@ -110,9 +110,8 @@ class RandomAprilTagTurnsNode:
                     id_and_type_msg.turn_type = self.turn_type
                     self.pub_id_and_type.publish(id_and_type_msg)
 
-                rospy.loginfo("possible turns %s." %(availableTurns))
-                rospy.loginfo("Turn type now: %i" %(self.turn_type))
-
+                rospy.loginfo("possible turns %s." % (availableTurns))
+                rospy.loginfo("Turn type now: %i" % (self.turn_type))
 
     def setupParameter(self, param_name, default_value):
         value = rospy.get_param(param_name, default_value)
