@@ -8,6 +8,7 @@ import numpy
 import rospy
 from duckietown_msgs.msg import AprilTagsWithInfos, FSMState, TurnIDandType
 from std_msgs.msg import Int16  # Imports msg
+import sys
 
 
 class RandomAprilTagTurnsNode:
@@ -49,9 +50,9 @@ class RandomAprilTagTurnsNode:
 
     def cbTag(self, tag_msgs):
         if (
-            self.fsm_mode == "INTERSECTION_CONTROL"
-            or self.fsm_mode == "INTERSECTION_COORDINATION"
-            or self.fsm_mode == "INTERSECTION_PLANNING"
+                self.fsm_mode == "INTERSECTION_CONTROL"
+                or self.fsm_mode == "INTERSECTION_COORDINATION"
+                or self.fsm_mode == "INTERSECTION_PLANNING"
         ):
             # loop through list of april tags
 
@@ -69,6 +70,7 @@ class RandomAprilTagTurnsNode:
 
             if idx_min != -1:
                 rospy.loginfo('dkfjdksljlksdjfklsdjfkljsklfjd')
+                sys.stdout.flush()
                 # taginfo = (tag_msgs.infos)[idx_min]
                 #
                 # availableTurns = []
@@ -107,8 +109,8 @@ class RandomAprilTagTurnsNode:
                 #     id_and_type_msg.turn_type = self.turn_type
                 #     self.pub_id_and_type.publish(id_and_type_msg)
 
-                    # rospy.loginfo("possible turns %s." %(availableTurns))
-                    # rospy.loginfo("Turn type now: %i" %(self.turn_type))
+                # rospy.loginfo("possible turns %s." %(availableTurns))
+                # rospy.loginfo("Turn type now: %i" %(self.turn_type))
 
     def setupParameter(self, param_name, default_value):
         value = rospy.get_param(param_name, default_value)
@@ -131,4 +133,3 @@ if __name__ == "__main__":
     rospy.on_shutdown(node.on_shutdown)
     # Keep it spinning to keep the node alive
     rospy.spin()
-
