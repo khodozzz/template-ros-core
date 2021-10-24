@@ -69,7 +69,7 @@ class RandomAprilTagTurnsNode:
                         idx_min = idx
 
             if idx_min != -1:
-                rospy.loginfo('dkfjdksljlksdjfklsdjfkljsklfjd')
+                rospy.loginfo('im here')
                 sys.stdout.flush()
                 # taginfo = (tag_msgs.infos)[idx_min]
                 #
