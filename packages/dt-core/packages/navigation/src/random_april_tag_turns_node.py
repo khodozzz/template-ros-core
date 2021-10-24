@@ -49,8 +49,6 @@ class RandomAprilTagTurnsNode:
             # rospy.loginfo("Turn type now: %i" %(self.turn_type))
 
     def cbTag(self, tag_msgs):
-        rospy.loginfo('im there')
-        sys.stdout.flush()
         if (
                 self.fsm_mode == "INTERSECTION_CONTROL"
                 or self.fsm_mode == "INTERSECTION_COORDINATION"
@@ -71,6 +69,9 @@ class RandomAprilTagTurnsNode:
                         idx_min = idx
 
             if idx_min != -1:
+                rospy.loginfo('im there')
+                sys.stdout.flush()
+
                 taginfo = (tag_msgs.infos)[idx_min]
 
                 availableTurns = [0]
