@@ -34,4 +34,5 @@ def target_pos():
 
 
 if __name__ == '__main__':
+    print(build_graph().shortest_path(11, 1))
     print(build_graph().shortest_path(1, 11))

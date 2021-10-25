@@ -8,12 +8,11 @@ class Graph:
             self.target = target
             self.weight = weight
 
-            # TODO: ?????
             self.dir_source = dir_source
             self.dir_target = dir_target
 
         def __repr__(self):
-            return f'({self.source} -> {self.target} ({self.weight}) <{self.dir_source}-{self.dir_target}>)'
+            return f'({self.source} -> {self.target} <{self.dir_source}, {self.dir_target}>)'
 
     def __init__(self):
         self._nodes = set()

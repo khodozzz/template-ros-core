@@ -24,7 +24,9 @@ class RandomAprilTagTurnsNode:
         # Setup my controller
         self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
         self.controller.plan_path(dt_etu.target_pos())
-        rospy.loginfo(f'[{self.node_name}] Path is {self.controller._path}')
+        rospy.loginfo(f'[{self.node_name}] Path: {self.controller._path}')
+        rospy.loginfo(f'[{self.node_name}] Roads: {self.controller._edges}')
+        rospy.loginfo(f'[{self.node_name}] Turns: {self.controller._turns}')
 
         # Setup last turn time
         self.last_turn_time = None
@@ -82,8 +84,8 @@ class RandomAprilTagTurnsNode:
             if idx_min != -1:
 
                 # check if last choice of the turn was min_time_diff sec ago
-                min_time_diff = 20
-                time_diff = time.time() - self.last_turn_time if self.last_turn_time is not None else 100
+                min_time_diff = 15
+                time_diff = 100 if self.last_turn_time is None else time.time() - self.last_turn_time
                 if time_diff < min_time_diff:
                     # rospy.loginfo(f'[{self.node_name}] Last choice of the turn was {time_diff} s ago')
                     # sys.stdout.flush()
@@ -92,6 +94,7 @@ class RandomAprilTagTurnsNode:
                 taginfo = (tag_msgs.infos)[idx_min]
 
                 chosenTurn = self.controller.next_turn()
+                chosenTurnStr = 'left' if chosenTurn == 0 else 'straight' if chosenTurn == 1 else 'right'
 
                 self.turn_type = chosenTurn
                 self.pub_turn_type.publish(self.turn_type)
@@ -103,7 +106,7 @@ class RandomAprilTagTurnsNode:
 
                 self.last_turn_time = time.time()
 
-                rospy.loginfo(f'[{self.node_name}] Chosen turn is {chosenTurn}')
+                rospy.loginfo(f'[{self.node_name}] Chosen turn is {chosenTurn} ({chosenTurnStr})')
                 sys.stdout.flush()
 
     def setupParameter(self, param_name, default_value):
