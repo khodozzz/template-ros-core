@@ -15,14 +15,17 @@ from my_controller import dt_etu
 
 class RandomAprilTagTurnsNode:
     def __init__(self):
-        self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
-        self.controller.plan_path(dt_etu.target_pos())
-
         # Save the name of the node
         self.node_name = rospy.get_name()
         self.turn_type = -1
 
         rospy.loginfo(f"[{self.node_name}] Initializing.")
+
+        # Setup my controller
+        self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
+        self.controller.plan_path(dt_etu.target_pos())
+        rospy.loginfo(f'Path is {self.controller._path}')
+        sys.stdout.flush()
 
         # Setup publishers
         # self.pub_topic_a = rospy.Publisher("~topic_a",String, queue_size=1)
