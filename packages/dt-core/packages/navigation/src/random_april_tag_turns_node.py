@@ -22,8 +22,10 @@ class RandomAprilTagTurnsNode:
         rospy.loginfo(f"[{self.node_name}] Initializing.")
 
         # Setup my controller
-        self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
-        self.controller.plan_path(dt_etu.target_pos())
+        self.controller = NavigationController(dt_etu.build_graph())
+
+        # Plan path
+        self.controller.plan_path(dt_etu.start_pos(), dt_etu.target_pos())
         rospy.loginfo(f'[{self.node_name}] Path: {self.controller._path}')
         rospy.loginfo(f'[{self.node_name}] Roads: {self.controller._edges}')
         rospy.loginfo(f'[{self.node_name}] Turns: {self.controller._turns}')
@@ -93,8 +95,7 @@ class RandomAprilTagTurnsNode:
 
                 taginfo = (tag_msgs.infos)[idx_min]
 
-                chosenTurn = self.controller.next_turn()
-                chosenTurnStr = 'left' if chosenTurn == 0 else 'straight' if chosenTurn == 1 else 'right'
+                chosenTurn, chosenTurnStr = self.controller.next_turn()
 
                 self.turn_type = chosenTurn
                 self.pub_turn_type.publish(self.turn_type)
