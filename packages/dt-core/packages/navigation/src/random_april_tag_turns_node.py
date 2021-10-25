@@ -94,16 +94,14 @@ class RandomAprilTagTurnsNode:
 
                 # ros::Duration(1.0).sleep()
 
+    def setupParameter(self, param_name, default_value):
+        value = rospy.get_param(param_name, default_value)
+        rospy.set_param(param_name, value)  # Write to parameter server for transparancy
+        # rospy.loginfo("[%s] %s = %s " %(self.node_name,param_name,value))
+        return value
 
-def setupParameter(self, param_name, default_value):
-    value = rospy.get_param(param_name, default_value)
-    rospy.set_param(param_name, value)  # Write to parameter server for transparancy
-    # rospy.loginfo("[%s] %s = %s " %(self.node_name,param_name,value))
-    return value
-
-
-def on_shutdown(self):
-    rospy.loginfo(f"[{self.node_name}] Shutting down.")
+    def on_shutdown(self):
+        rospy.loginfo(f"[{self.node_name}] Shutting down.")
 
 
 if __name__ == "__main__":
