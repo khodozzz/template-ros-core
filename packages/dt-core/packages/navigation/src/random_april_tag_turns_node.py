@@ -28,7 +28,7 @@ class RandomAprilTagTurnsNode:
         self.controller.plan_path(dt_etu.start_pos(), dt_etu.target_pos())
         rospy.loginfo(f'[{self.node_name}] Path: {self.controller.path}')
         rospy.loginfo(f'[{self.node_name}] Roads: {self.controller.edges}')
-        rospy.loginfo(f'[{self.node_name}] Turns: {self.controller.turns}')
+        rospy.loginfo(f'[{self.node_name}] Turns (deg): {self.controller.turns}')
 
         # Initialize last turn time
         self.last_turn_time = None
@@ -89,7 +89,7 @@ class RandomAprilTagTurnsNode:
                 min_time_diff = 15
                 time_diff = 100 if self.last_turn_time is None else time.time() - self.last_turn_time
                 if time_diff < min_time_diff:
-                    # rospy.loginfo(f'[{self.node_name}] Last choice of the turn was {time_diff} s ago')
+                    # rospy.loginfo(f'[{self.node_name}] Last choice of the turn was {time_diff} sec ago')
                     return
 
                 chosenTurn = self.controller.next_turn()
@@ -106,7 +106,7 @@ class RandomAprilTagTurnsNode:
 
                     self.last_turn_time = time.time()
 
-                    rospy.loginfo(f'[{self.node_name}] Chosen turn is {chosenTurn[0]} ({chosenTurn[1]})')
+                    rospy.loginfo(f'[{self.node_name}] Chosen turn is {chosenTurn[1]} ({chosenTurn[0]})')
                 else:
                     rospy.loginfo(f'[{self.node_name}] Target {self.controller.target} was achieved)')
 
