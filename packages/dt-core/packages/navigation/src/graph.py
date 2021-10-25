@@ -32,7 +32,7 @@ class Graph:
 
         if bidirectional:
             edges = self._edges.get(target, set())
-            edges.add(self.Edge(target, source, weight, 180 - dir_target, 180 - dir_source))
+            edges.add(self.Edge(target, source, weight, dir_target - 180 , dir_source - 180))
             self._edges[target] = edges
 
     def shortest_path(self, start, goal, start_angle=0):
@@ -57,9 +57,9 @@ class Graph:
 
                     new_turns = list(turns)
                     if len(edges) > 0:
-                        angle = edges[-1].dir_source - edge.dir_target
+                        angle = edge.dir_source - edges[-1].dir_target
                     else:
-                        angle = start_angle - edge.dir_target
+                        angle = edge.dir_source - start_angle
                     new_turns.append((360 + angle) * (angle < 0) + angle * (angle > 0))
 
                     new_dist = dist + edge.weight
@@ -74,8 +74,6 @@ if __name__ == '__main__':
     g = Graph()
     g.add_edge(1, 2, 5, 0, 0, bidirectional=True)
     g.add_edge(2, 3, 7, 0, 0, bidirectional=True)
-    g.add_edge(1, 4, 8, 270, 0)
-    g.add_edge(2, 4, 10, 270, 270)
     g.add_edge(3, 4, 15, 270, 180, bidirectional=True)
 
     print(g.shortest_path(4, 1))

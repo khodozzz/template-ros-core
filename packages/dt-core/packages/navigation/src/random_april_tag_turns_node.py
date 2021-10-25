@@ -2,17 +2,22 @@
 # -*- coding: utf-8 -*-
 
 import math
-
+import sys
 import numpy
 
 import rospy
 from duckietown_msgs.msg import AprilTagsWithInfos, FSMState, TurnIDandType
 from std_msgs.msg import Int16  # Imports msg
-import sys
+
+from controller import NavigationController
+import dt_etu
 
 
 class RandomAprilTagTurnsNode:
     def __init__(self):
+        self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
+        self.controller.plan_path(dt_etu.target_pos())
+
         # Save the name of the node
         self.node_name = rospy.get_name()
         self.turn_type = -1
@@ -69,39 +74,33 @@ class RandomAprilTagTurnsNode:
                         idx_min = idx
 
             if idx_min != -1:
-
                 taginfo = (tag_msgs.infos)[idx_min]
 
-                availableTurns = [0]
+                chosenTurn = self.controller.next_turn()
 
-                if len(availableTurns) > 0:
-                    # 3501: turn off right turns
-                    # randomIndex = numpy.random.randint(len(availableTurns))
-                    # chosenTurn = availableTurns[randomIndex]
-                    while True:
-                        randomIndex = numpy.random.randint(len(availableTurns))
-                        chosenTurn = availableTurns[randomIndex]
-                        rospy.loginfo("Turn type now: %i" % (chosenTurn))
-                        if chosenTurn != 2:
-                            break
-                    # end of fix
+                rospy.loginfo(f'Chosen turn is {chosenTurn}')
+                sys.stdout.flush()
 
-                    self.turn_type = chosenTurn
-                    self.pub_turn_type.publish(self.turn_type)
+                self.turn_type = chosenTurn
+                self.pub_turn_type.publish(self.turn_type)
 
-                    id_and_type_msg = TurnIDandType()
-                    id_and_type_msg.tag_id = taginfo.id
-                    id_and_type_msg.turn_type = self.turn_type
-                    self.pub_id_and_type.publish(id_and_type_msg)
+                id_and_type_msg = TurnIDandType()
+                id_and_type_msg.tag_id = taginfo.id
+                id_and_type_msg.turn_type = self.turn_type
+                self.pub_id_and_type.publish(id_and_type_msg)
 
-    def setupParameter(self, param_name, default_value):
-        value = rospy.get_param(param_name, default_value)
-        rospy.set_param(param_name, value)  # Write to parameter server for transparancy
-        # rospy.loginfo("[%s] %s = %s " %(self.node_name,param_name,value))
-        return value
+                #ros::Duration(1.0).sleep()
 
-    def on_shutdown(self):
-        rospy.loginfo(f"[{self.node_name}] Shutting down.")
+
+def setupParameter(self, param_name, default_value):
+    value = rospy.get_param(param_name, default_value)
+    rospy.set_param(param_name, value)  # Write to parameter server for transparancy
+    # rospy.loginfo("[%s] %s = %s " %(self.node_name,param_name,value))
+    return value
+
+
+def on_shutdown(self):
+    rospy.loginfo(f"[{self.node_name}] Shutting down.")
 
 
 if __name__ == "__main__":
