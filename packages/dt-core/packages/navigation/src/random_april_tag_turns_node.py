@@ -25,7 +25,6 @@ class RandomAprilTagTurnsNode:
         self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
         self.controller.plan_path(dt_etu.target_pos())
         rospy.loginfo(f'Path is {self.controller._path}')
-        sys.stdout.flush()
 
         # Setup publishers
         # self.pub_topic_a = rospy.Publisher("~topic_a",String, queue_size=1)
@@ -44,6 +43,7 @@ class RandomAprilTagTurnsNode:
         # self.timer = rospy.Timer(rospy.Duration.from_sec(self.pub_timestep),self.cbTimer)
 
         rospy.loginfo(f"[{self.node_name}] Initialzed.")
+        sys.stdout.flush()
 
         self.rate = rospy.Rate(30)  # 10hz
 
@@ -92,7 +92,7 @@ class RandomAprilTagTurnsNode:
                 id_and_type_msg.turn_type = self.turn_type
                 self.pub_id_and_type.publish(id_and_type_msg)
 
-                #ros::Duration(1.0).sleep()
+                # ros::Duration(1.0).sleep()
 
 
 def setupParameter(self, param_name, default_value):
