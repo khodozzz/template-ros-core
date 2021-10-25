@@ -26,11 +26,11 @@ class RandomAprilTagTurnsNode:
 
         # Plan path
         self.controller.plan_path(dt_etu.start_pos(), dt_etu.target_pos())
-        rospy.loginfo(f'[{self.node_name}] Path: {self.controller._path}')
-        rospy.loginfo(f'[{self.node_name}] Roads: {self.controller._edges}')
-        rospy.loginfo(f'[{self.node_name}] Turns: {self.controller._turns}')
+        rospy.loginfo(f'[{self.node_name}] Path: {self.controller.path}')
+        rospy.loginfo(f'[{self.node_name}] Roads: {self.controller.edges}')
+        rospy.loginfo(f'[{self.node_name}] Turns: {self.controller.turns}')
 
-        # Setup last turn time
+        # Initialize last turn time
         self.last_turn_time = None
 
         # Setup publishers
@@ -90,24 +90,26 @@ class RandomAprilTagTurnsNode:
                 time_diff = 100 if self.last_turn_time is None else time.time() - self.last_turn_time
                 if time_diff < min_time_diff:
                     # rospy.loginfo(f'[{self.node_name}] Last choice of the turn was {time_diff} s ago')
-                    # sys.stdout.flush()
                     return
 
-                taginfo = (tag_msgs.infos)[idx_min]
+                chosenTurn = self.controller.next_turn()
 
-                chosenTurn, chosenTurnStr = self.controller.next_turn()
+                if chosenTurn is not None:
+                    self.turn_type = chosenTurn[0]
+                    self.pub_turn_type.publish(self.turn_type)
 
-                self.turn_type = chosenTurn
-                self.pub_turn_type.publish(self.turn_type)
+                    taginfo = (tag_msgs.infos)[idx_min]
+                    id_and_type_msg = TurnIDandType()
+                    id_and_type_msg.tag_id = taginfo.id
+                    id_and_type_msg.turn_type = self.turn_type
+                    self.pub_id_and_type.publish(id_and_type_msg)
 
-                id_and_type_msg = TurnIDandType()
-                id_and_type_msg.tag_id = taginfo.id
-                id_and_type_msg.turn_type = self.turn_type
-                self.pub_id_and_type.publish(id_and_type_msg)
+                    self.last_turn_time = time.time()
 
-                self.last_turn_time = time.time()
+                    rospy.loginfo(f'[{self.node_name}] Chosen turn is {chosenTurn[0]} ({chosenTurn[1]})')
+                else:
+                    rospy.loginfo(f'[{self.node_name}] Target {self.controller.target} was achieved)')
 
-                rospy.loginfo(f'[{self.node_name}] Chosen turn is {chosenTurn} ({chosenTurnStr})')
                 sys.stdout.flush()
 
     def setupParameter(self, param_name, default_value):

@@ -5,11 +5,15 @@ class NavigationController:
     def __init__(self, graph):
         self.graph = graph
 
-        self._dist = self._path = self._edges = self._turns = self._turns_it = None
+        self.dist = self.path = self.edges = self.turns = \
+            self._turns_it = self.source = self.target = None
 
     def plan_path(self, source, target):
-        self._dist, self._path, self._edges, self._turns = self.graph.shortest_path(source, target)
-        self._turns_it = iter(self._turns)
+        self.source = source
+        self.target = target
+
+        self.dist, self.path, self.edges, self.turns = self.graph.shortest_path(source, target)
+        self._turns_it = iter(self.turns)
 
     def next_turn(self):
         turn_deg = next(self._turns_it, None)
