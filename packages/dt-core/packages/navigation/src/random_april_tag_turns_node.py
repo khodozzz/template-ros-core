@@ -85,8 +85,8 @@ class RandomAprilTagTurnsNode:
                 min_time_diff = 5
                 time_diff = time.time() - self.last_turn_time if self.last_turn_time is not None else 0
                 if time_diff < min_time_diff:
-                    rospy.loginfo(f'[{self.node_name}] Last chose of the turn was {time_diff} s ago')
-                    sys.stdout.flush()
+                    # rospy.loginfo(f'[{self.node_name}] Last chose of the turn was {time_diff} s ago')
+                    # sys.stdout.flush()
                     return
 
                 taginfo = (tag_msgs.infos)[idx_min]
