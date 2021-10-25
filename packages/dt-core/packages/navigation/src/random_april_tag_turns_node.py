@@ -3,7 +3,7 @@
 
 import math
 import sys
-import numpy
+import time
 
 import rospy
 from duckietown_msgs.msg import AprilTagsWithInfos, FSMState, TurnIDandType
@@ -24,7 +24,10 @@ class RandomAprilTagTurnsNode:
         # Setup my controller
         self.controller = NavigationController(dt_etu.build_graph(), dt_etu.start_pos())
         self.controller.plan_path(dt_etu.target_pos())
-        rospy.loginfo(f'Path is {self.controller._path}')
+        rospy.loginfo(f'[{self.node_name}] Path is {self.controller._path}')
+
+        # Setup last turn time
+        self.last_turn_time = None
 
         # Setup publishers
         # self.pub_topic_a = rospy.Publisher("~topic_a",String, queue_size=1)
@@ -77,12 +80,18 @@ class RandomAprilTagTurnsNode:
                         idx_min = idx
 
             if idx_min != -1:
+
+                # check if last chose of the turn was min_time_diff sec ago
+                min_time_diff = 5
+                time_diff = time.time() - self.last_turn_time
+                if time_diff < min_time_diff:
+                    rospy.loginfo(f'[{self.node_name}] Last chose of the turn was {time_diff} s ago')
+                    sys.stdout.flush()
+                    return
+
                 taginfo = (tag_msgs.infos)[idx_min]
 
                 chosenTurn = self.controller.next_turn()
-
-                rospy.loginfo(f'Chosen turn is {chosenTurn}')
-                sys.stdout.flush()
 
                 self.turn_type = chosenTurn
                 self.pub_turn_type.publish(self.turn_type)
@@ -92,7 +101,10 @@ class RandomAprilTagTurnsNode:
                 id_and_type_msg.turn_type = self.turn_type
                 self.pub_id_and_type.publish(id_and_type_msg)
 
-                rospy.sleep(20)
+                self.last_turn_time = time.time()
+
+                rospy.loginfo(f'[{self.node_name}] Chosen turn is {chosenTurn}')
+                sys.stdout.flush()
 
     def setupParameter(self, param_name, default_value):
         value = rospy.get_param(param_name, default_value)
