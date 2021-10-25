@@ -1,6 +1,0 @@
-<launch>
-	<arg name="veh" default="$(env VEHICLE_NAME)"/>
-	<group ns="$(arg veh)">
-		<node name="navigation_node" pkg="circle_drive" type="navigation_node.py" output="screen" required="true"/>
-	</group>
-</launch>
