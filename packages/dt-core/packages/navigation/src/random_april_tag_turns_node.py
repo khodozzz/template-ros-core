@@ -92,7 +92,7 @@ class RandomAprilTagTurnsNode:
                 id_and_type_msg.turn_type = self.turn_type
                 self.pub_id_and_type.publish(id_and_type_msg)
 
-                # ros::Duration(1.0).sleep()
+                ros::Duration(1.0).sleep()
 
     def setupParameter(self, param_name, default_value):
         value = rospy.get_param(param_name, default_value)
