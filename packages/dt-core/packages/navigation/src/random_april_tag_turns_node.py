@@ -9,8 +9,8 @@ import rospy
 from duckietown_msgs.msg import AprilTagsWithInfos, FSMState, TurnIDandType
 from std_msgs.msg import Int16  # Imports msg
 
-from controller import NavigationController
-import dt_etu
+from my_controller.controller import NavigationController
+from my_controller import dt_etu
 
 
 class RandomAprilTagTurnsNode:

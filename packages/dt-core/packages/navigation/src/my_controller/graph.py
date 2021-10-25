@@ -32,7 +32,7 @@ class Graph:
 
         if bidirectional:
             edges = self._edges.get(target, set())
-            edges.add(self.Edge(target, source, weight, dir_target - 180 , dir_source - 180))
+            edges.add(self.Edge(target, source, weight, dir_target - 180, dir_source - 180))
             self._edges[target] = edges
 
     def shortest_path(self, start, goal, start_angle=0):

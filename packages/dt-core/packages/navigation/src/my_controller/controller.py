@@ -1,4 +1,5 @@
-import dt_etu
+from my_controller import dt_etu
+
 
 class NavigationController:
     def __init__(self, graph, start_pos):

@@ -1,4 +1,4 @@
-from graph import Graph
+from my_controller.graph import Graph
 
 
 def build_graph():
