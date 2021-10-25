@@ -22,7 +22,7 @@ class Graph:
     def add_node(self, node_id):
         self._nodes.add(node_id)
 
-    def add_edge(self, source, target, weight=1, dir_source=0, dir_target=0, bidirectional=False):
+    def add_edge(self, source, target, weight=1, dir_source=0, dir_target=0, bidirectional=True):
         self.add_node(source)
         self.add_node(target)
 
