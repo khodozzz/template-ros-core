@@ -26,11 +26,11 @@ def build_graph():
 
 
 def start_pos():
-    return 1
+    return 5
 
 
 def target_pos():
-    return 11
+    return 9
 
 
 if __name__ == '__main__':
