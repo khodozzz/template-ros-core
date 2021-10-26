@@ -26,7 +26,7 @@ def build_graph():
 
 
 def start_pos():
-    return 2
+    return 8
 
 
 def target_pos():
